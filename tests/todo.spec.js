@@ -15,7 +15,7 @@ test.describe('Todo App', () => {
 
   test.describe('Estado inicial', () => {
     test('deve exibir o título da página', async ({ page }) => {
-      await expect(page.getByRole('heading', { name: 'To-Do List Potato' })).toBeVisible()
+      await expect(page.getByRole('heading', { name: 'To-Do List' })).toBeVisible()
     })
 
     test('deve exibir a mensagem de lista vazia', async () => {
@@ -39,7 +39,7 @@ test.describe('Todo App', () => {
       await todoPage.addTodo('Comprar pão')
 
       await expect(todoPage.todoItems).toHaveCount(1)
-      await expect(todoPage.todoItems.first().getByTestId('todo-description')).toHaveText('Comprar pão')
+      await expect(todoPage.todoItems.first().getByTestId('todo-description')).toHaveText('Comprar pães')
     })
 
     test('deve limpar o input após adicionar', async () => {

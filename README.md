@@ -53,25 +53,6 @@ playwright.config.js
 .github/
   workflows/
     ci.yml              # roda os testes no GitHub Actions
-    triage.yml          # aciona o agente de triage quando o CI falha
-  test-automation-buddy-config.yml  # config do agente
 ```
-
-## Triage automático de falhas
-
-Quando o CI falha, o workflow `triage.yml` aciona o agente [test-automation-buddy](https://github.com/juniorschmitz/test-automation-buddy), que:
-
-1. Analisa os artefatos do Playwright
-2. Classifica a causa raiz (`locator_outdated`, `timing_instability`, `application_bug`, `flaky`, `unknown`)
-3. Abre um issue no repositório correto — testes ou webapp
-4. Atribui o Copilot Coding Agent para corrigir automaticamente (nos casos elegíveis)
-
-### Secret necessário
-
-Adicione em **Settings → Secrets → Actions** do repositório `todo-tests`:
-
-| Secret | Descrição |
-|--------|-----------|
-| `GH_TOKEN` | PAT clássico com `repo` (issues + contents em `todo-tests` e `todo-webapp`) e `actions:read` em `todo-tests` |
 
 
