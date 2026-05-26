@@ -73,3 +73,5 @@ Adicione em **Settings → Secrets → Actions** do repositório `todo-tests`:
 | Secret | Descrição |
 |--------|-----------|
 | `GH_TOKEN` | PAT clássico com `repo` (issues + contents em `todo-tests` e `todo-webapp`) e `actions:read` em `todo-tests` |
+
+
