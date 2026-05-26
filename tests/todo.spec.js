@@ -15,7 +15,7 @@ test.describe('Todo App', () => {
 
   test.describe('Estado inicial', () => {
     test('deve exibir o título da página', async ({ page }) => {
-      await expect(page.getByRole('heading', { name: 'To-Do List' })).toBeVisible()
+      await expect(page.getByRole('heading', { name: 'To-Do List Potato' })).toBeVisible()
     })
 
     test('deve exibir a mensagem de lista vazia', async () => {
