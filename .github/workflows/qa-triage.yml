@@ -27,9 +27,6 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug artifact structure
-        run: find artifacts/ -type f | sort
-
       - name: Extract failure summary
         id: extract
         run: |
@@ -73,6 +70,7 @@ jobs:
           model: ${{ steps.config.outputs.model }}
           system-prompt: ${{ steps.prompts.outputs.system }}
           prompt: ${{ steps.prompts.outputs.user }}
+          max-tokens: 2000
 
       - name: Create issues
         uses: actions/github-script@v7
