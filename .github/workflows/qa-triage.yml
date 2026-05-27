@@ -27,11 +27,14 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug artifact structure
+        run: find artifacts/ -type f | sort
+
       - name: Extract failure summary
         id: extract
         run: |
           if [ -f artifacts/test-results/results.json ]; then
-            SUMMARY=$(jq -c '[.suites[].specs[] | select(.tests[].results[].status != "passed") | {title, file, error: .tests[0].results[0].error}]' artifacts/test-results/results.json)
+            SUMMARY=$(jq -c '[.suites[] | .. | .specs? // empty | .[] | select(.tests[0].results[0].status != "passed") | {title, error: .tests[0].results[0].error}]' artifacts/test-results/results.json)
           else
             SUMMARY="[]"
           fi
