@@ -49,7 +49,7 @@ jobs:
           {
             echo "model=$(yq '.model' $CFG)"
             echo "dedup_label=$(yq '.dedup_label' $CFG)"
-            echo "default_labels=$(yq -o=json '.default_labels' $CFG)"
+            echo "default_labels=$(yq -o=json -I=0 '.default_labels' $CFG)"
           } >> "$GITHUB_OUTPUT"
 
       - name: Build prompts
