@@ -39,7 +39,7 @@ test.describe('Todo App', () => {
       await todoPage.addTodo('Comprar pão')
 
       await expect(todoPage.todoItems).toHaveCount(1)
-      await expect(todoPage.todoItems.first().getByTestId('todo-description')).toHaveText('Comprar pães')
+      await expect(todoPage.todoItems.first().getByTestId('todo-description')).toHaveText('Comprar pão')
     })
 
     test('deve limpar o input após adicionar', async () => {
