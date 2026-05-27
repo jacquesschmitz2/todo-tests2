@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: jacquesschmitz2/todo-webapp2
-          path: todo-webapp2
+          path: todo-webapp
 
       - uses: actions/setup-node@v4
         with:
