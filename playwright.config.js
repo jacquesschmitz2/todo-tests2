@@ -19,8 +19,10 @@ export default defineConfig({
   // Workers
   workers: process.env.CI ? 1 : undefined,
 
-  // HTML reporter — run `npm run test:report` to open
-  reporter: 'html',
+  reporter: [
+    'html',
+    ['json', { outputFile: 'test-results/results.json' }],
+  ],
 
   use: {
     // CI sets BASE_URL pointing to the running webapp; locally the webServer below handles it
