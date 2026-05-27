@@ -1,5 +1,5 @@
 ---
-name: qa-triage
+name: test-resolver
 description: Analisa falhas de teste E2E, identifica a causa raiz consultando o repositório da aplicação, e corrige autonomamente o teste quando o problema for desatualização. Abre issue no repo da aplicação quando for bug.
 tools: ["*"]
 ---
