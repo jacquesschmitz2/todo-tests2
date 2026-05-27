@@ -80,4 +80,4 @@ jobs:
           DEFAULT_LABELS: ${{ steps.config.outputs.default_labels }}
         with:
           script: |
-            await require('./.github/ai-triage/scripts/create-issues.js')({github, context, core})
+            await require('./.github/ai-triage/scripts/create-issues.cjs')({github, context, core})
