@@ -1,0 +1,18 @@
+model: openai/gpt-4o
+max_issues: 5
+dedup_label: qa-triage
+default_labels:
+  - qa-triage
+  - playwright
+  - auto-generated
+categories:
+  - bug-real
+  - flaky
+  - ambiente
+  - dado-de-teste
+  - assertion-desatualizada
+severities:
+  - critica
+  - alta
+  - media
+  - baixa

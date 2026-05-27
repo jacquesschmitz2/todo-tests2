@@ -1,11 +1,11 @@
 # todo-tests
 
-Testes E2E do [todo-webapp](https://github.com/juniorschmitz/todo-webapp) escritos com [Playwright](https://playwright.dev/).
+Testes E2E do [todo-webapp](https://github.com/jacquesschmitz2/todo-webapp2) escritos com [Playwright](https://playwright.dev/).
 
 ## Pré-requisitos
 
 - Node.js 20+
-- Clone do [todo-webapp](https://github.com/juniorschmitz/todo-webapp) na pasta irmã `../todo-webapp` (apenas para rodar localmente)
+- Clone do [todo-webapp](https://github.com/jacquesschmitz2/todo-webapp2) na pasta irmã `../todo-webapp` (apenas para rodar localmente)
 
 ## Instalação
 

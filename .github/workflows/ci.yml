@@ -23,8 +23,8 @@ jobs:
       - name: Checkout webapp repo
         uses: actions/checkout@v4
         with:
-          repository: juniorschmitz/todo-webapp
-          path: todo-webapp
+          repository: jacquesschmitz2/todo-webapp2
+          path: todo-webapp2
 
       - uses: actions/setup-node@v4
         with:

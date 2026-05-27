@@ -1,0 +1,83 @@
+name: QA Triage - Playwright Failures
+
+on:
+  workflow_run:
+    workflows: ["CI — Playwright Tests"]
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+  models: read
+
+jobs:
+  triage:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Playwright artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: ./artifacts
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract failure summary
+        id: extract
+        run: |
+          if [ -f artifacts/test-results/results.json ]; then
+            SUMMARY=$(jq -c '[.suites[].specs[] | select(.tests[].results[].status != "passed") | {title, file, error: .tests[0].results[0].error}]' artifacts/test-results/results.json)
+          else
+            SUMMARY="[]"
+          fi
+          { echo "summary<<EOF"; echo "$SUMMARY"; echo "EOF"; } >> "$GITHUB_OUTPUT"
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Load config
+        id: config
+        run: |
+          CFG=.github/ai-triage/config.yml
+          {
+            echo "model=$(yq '.model' $CFG)"
+            echo "dedup_label=$(yq '.dedup_label' $CFG)"
+            echo "default_labels=$(yq -o=json '.default_labels' $CFG)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build prompts
+        id: prompts
+        env:
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+          BRANCH: ${{ github.event.workflow_run.head_branch }}
+          FAILURES_JSON: ${{ steps.extract.outputs.summary }}
+        run: |
+          { echo "system<<EOF"; cat .github/ai-triage/prompts/system.md; echo "EOF"; } >> "$GITHUB_OUTPUT"
+          { echo "user<<EOF"; envsubst '${RUN_URL} ${COMMIT_SHA} ${BRANCH} ${FAILURES_JSON}' < .github/ai-triage/prompts/user.md; echo "EOF"; } >> "$GITHUB_OUTPUT"
+
+      - name: Triage failures with GitHub Models
+        id: triage
+        uses: actions/ai-inference@v1
+        with:
+          model: ${{ steps.config.outputs.model }}
+          system-prompt: ${{ steps.prompts.outputs.system }}
+          prompt: ${{ steps.prompts.outputs.user }}
+
+      - name: Create issues
+        uses: actions/github-script@v7
+        env:
+          AI_RESPONSE: ${{ steps.triage.outputs.response }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          DEDUP_LABEL: ${{ steps.config.outputs.dedup_label }}
+          DEFAULT_LABELS: ${{ steps.config.outputs.default_labels }}
+        with:
+          script: |
+            await require('./.github/ai-triage/scripts/create-issues.js')({github, context, core})
